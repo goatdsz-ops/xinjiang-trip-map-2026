@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -443,9 +444,49 @@ function overviewContent() {
 // ║  ENGINE — Do not modify below unless customizing behavior   ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const map = L.map('map', { center: [HOTEL.lat || 35.69, HOTEL.lng || 139.74], zoom: 12, zoomControl: false, attributionControl: true });
+function outOfChina(lat, lng) {
+  return lng < 72.004 || lng > 137.8347 || lat < 0.8293 || lat > 55.8271;
+}
+function transformLat(x, y) {
+  let ret = -100 + 2*x + 3*y + .2*y*y + .1*x*y + .2*Math.sqrt(Math.abs(x));
+  ret += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI)) * 2 / 3;
+  ret += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI)) * 2 / 3;
+  ret += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30)) * 2 / 3;
+  return ret;
+}
+function transformLng(x, y) {
+  let ret = 300 + x + 2*y + .1*x*x + .1*x*y + .1*Math.sqrt(Math.abs(x));
+  ret += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI)) * 2 / 3;
+  ret += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI)) * 2 / 3;
+  ret += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI)) * 2 / 3;
+  return ret;
+}
+function wgsToGcj(lat, lng) {
+  if (outOfChina(lat, lng)) return { lat, lng };
+  const a = 6378245.0, ee = 0.00669342162296594323;
+  let dLat = transformLat(lng - 105.0, lat - 35.0);
+  let dLng = transformLng(lng - 105.0, lat - 35.0);
+  const radLat = lat / 180.0 * Math.PI;
+  let magic = Math.sin(radLat);
+  magic = 1 - ee * magic * magic;
+  const sqrtMagic = Math.sqrt(magic);
+  dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * Math.PI);
+  dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * Math.PI);
+  return { lat: lat + dLat, lng: lng + dLng };
+}
+function mapLatLng(lat, lng) {
+  const p = wgsToGcj(lat, lng);
+  return [p.lat, p.lng];
+}
+
+const mapCenter = HOTEL.lat ? mapLatLng(HOTEL.lat, HOTEL.lng) : mapLatLng(41.7, 82.9);
+const map = L.map('map', { center: mapCenter, zoom: 6, zoomControl: false, attributionControl: true });
 L.control.zoom({ position: 'topright' }).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+  maxZoom: 18,
+  subdomains: ['1','2','3','4'],
+  attribution: '地图 © 高德'
+}).addTo(map);
 
 /* ── Geolocation ── */
 const LocateControl = L.Control.extend({
@@ -467,13 +508,14 @@ new LocateControl().addTo(map);
 let locMarker, locCircle;
 map.on('locationfound', e => {
   const r = e.accuracy / 2;
-  if (locMarker) { locMarker.setLatLng(e.latlng); locCircle.setLatLng(e.latlng).setRadius(r); }
+  const ll = mapLatLng(e.latlng.lat, e.latlng.lng);
+  if (locMarker) { locMarker.setLatLng(ll); locCircle.setLatLng(ll).setRadius(r); }
   else {
-    locMarker = L.marker(e.latlng, {
+    locMarker = L.marker(ll, {
       icon: L.divIcon({ className:'', html:'<div style="width:14px;height:14px;border-radius:50%;background:#007aff;border:2.5px solid #fff;box-shadow:0 0 6px rgba(0,122,255,.5)"></div><div class="loc-pulse" style="position:absolute;top:0;left:0"></div>', iconSize:[14,14], iconAnchor:[7,7] }),
       zIndexOffset: 2000
     }).addTo(map);
-    locCircle = L.circle(e.latlng, { radius: r, color: '#007aff', fillColor: '#007aff', fillOpacity: .08, weight: 1 }).addTo(map);
+    locCircle = L.circle(ll, { radius: r, color: '#007aff', fillColor: '#007aff', fillOpacity: .08, weight: 1 }).addTo(map);
   }
 });
 map.on('locationerror', () => {});
@@ -482,7 +524,7 @@ function icon(color, emoji) {
   return L.divIcon({ className: '', html: `<div style="width:28px;height:28px;border-radius:50%;background:${color};border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.18)">${emoji||''}</div>`, iconSize: [28,28], iconAnchor: [14,14], popupAnchor: [0,-16] });
 }
 
-if (HOTEL.lat) L.marker([HOTEL.lat, HOTEL.lng], { icon: icon('#ff9500','🏨'), zIndexOffset: 1000 }).addTo(map).bindPopup(`<b>${HOTEL.name}</b>`);
+if (HOTEL.lat) L.marker(mapLatLng(HOTEL.lat, HOTEL.lng), { icon: icon('#ff9500','🏨'), zIndexOffset: 1000 }).addTo(map).bindPopup(`<b>${HOTEL.name}</b>`);
 
 let markers = [], polylines = [];
 const emojis = { food:'🍽️', spot:'📍', hotel:'🏨', transport:'🚃', drink:'🍺' };
@@ -493,11 +535,11 @@ function showDay(idx) {
   clearMap();
   if (idx === 0) {
     const pts = [];
-    DAYS.forEach(d => d.locations.forEach(l => { if(l.lat) pts.push([l.lat,l.lng]); }));
+    DAYS.forEach(d => d.locations.forEach(l => { if(l.lat) pts.push(mapLatLng(l.lat,l.lng)); }));
     if(pts.length) map.fitBounds(pts, {padding:[30,30]});
     DAYS.slice(1).forEach(d => {
       d.locations.filter(l=>l.time!=='—').forEach(l => {
-        const m = L.circleMarker([l.lat,l.lng], { radius:4, fillColor:d.color, color:'#fff', weight:1.5, fillOpacity:.9 }).addTo(map).bindPopup(`<b>${l.name}</b><br><span style="color:#86868b">${d.label}</span>`);
+        const m = L.circleMarker(mapLatLng(l.lat,l.lng), { radius:4, fillColor:d.color, color:'#fff', weight:1.5, fillOpacity:.9 }).addTo(map).bindPopup(`<b>${l.name}</b><br><span style="color:#86868b">${d.label}</span>`);
         markers.push(m);
       });
     });
@@ -508,11 +550,11 @@ function showDay(idx) {
   const coords = [];
   day.locations.forEach(l => {
     if(!l.lat) return;
-    const m = L.marker([l.lat,l.lng], { icon: icon(day.color, emojis[l.type]||'📌') }).addTo(map);
+    const m = L.marker(mapLatLng(l.lat,l.lng), { icon: icon(day.color, emojis[l.type]||'📌') }).addTo(map);
     const gmapQ = l.gmap||encodeURIComponent(l.name+' Xinjiang China');
     m.bindPopup(`<b>${l.name}</b>${l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':''}<br>${l.desc}${l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':''}<br><a href="#" onclick="event.preventDefault();openAS('${l.name.replace(/'/g,"\\'")}',${l.lat},${l.lng},'${gmapQ}')">📍 导航</a>${l.xhs?' · <a href="'+l.xhs+'" target="_blank">📕 小红书</a>':''}`);
     markers.push(m);
-    if(l.time!=='—') coords.push([l.lat,l.lng]);
+    if(l.time!=='—') coords.push(mapLatLng(l.lat,l.lng));
   });
   if(coords.length>1) { const pl = L.polyline(coords, { color:day.color, weight:2.5, opacity:.5, dashArray:'6,5' }).addTo(map); polylines.push(pl); }
   if(coords.length) map.fitBounds(coords, { padding:[40,40], maxZoom:14 });
@@ -642,11 +684,13 @@ asOverlay.addEventListener('click', e => { if (e.target === asOverlay) closeAS()
 
 const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 function amapAppUrl(name, lat, lng) {
+  const p = wgsToGcj(lat, lng);
   const scheme = IS_IOS ? 'iosamap' : 'androidamap';
-  return `${scheme}://viewMap?sourceApplication=trip&poiname=${encodeURIComponent(name)}&lat=${lat}&lon=${lng}&dev=0`;
+  return `${scheme}://viewMap?sourceApplication=trip&poiname=${encodeURIComponent(name)}&lat=${p.lat}&lon=${p.lng}&dev=0`;
 }
 function amapWebUrl(name, lat, lng) {
-  return `https://uri.amap.com/marker?position=${lng},${lat}&name=${encodeURIComponent(name)}&src=trip&coordinate=wgs84&callnative=1`;
+  const p = wgsToGcj(lat, lng);
+  return `https://uri.amap.com/marker?position=${p.lng},${p.lat}&name=${encodeURIComponent(name)}&src=trip&coordinate=gaode&callnative=1`;
 }
 function openAmap(name, lat, lng) {
   if (IN_APP_WEBVIEW) { window.open(amapWebUrl(name, lat, lng)); return; }
