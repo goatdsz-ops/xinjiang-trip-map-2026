@@ -552,7 +552,8 @@ function showDay(idx) {
     if(!l.lat) return;
     const m = L.marker(mapLatLng(l.lat,l.lng), { icon: icon(day.color, emojis[l.type]||'📌') }).addTo(map);
     const gmapQ = l.gmap||encodeURIComponent(l.name+' Xinjiang China');
-    m.bindPopup(`<b>${l.name}</b>${l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':''}<br>${l.desc}${l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':''}<br><a href="#" onclick="event.preventDefault();openAS('${l.name.replace(/'/g,"\\'")}',${l.lat},${l.lng},'${gmapQ}')">📍 导航</a>${l.xhs?' · <a href="'+l.xhs+'" target="_blank">📕 小红书</a>':''}`);
+    const xhsPopup = (l.xhs||l.xhsKeyword) ? ` · <a href="${xhsWebUrl(l)}" target="_blank">📕 小红书参考</a>` : '';
+    m.bindPopup(`<b>${l.name}</b>${l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':''}<br>${l.desc}${l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':''}<br><a href="#" onclick="event.preventDefault();openAS('${l.name.replace(/'/g,"\\'")}',${l.lat},${l.lng},'${gmapQ}')">📍 导航</a>${xhsPopup}`);
     markers.push(m);
     if(l.time!=='—') coords.push(mapLatLng(l.lat,l.lng));
   });
@@ -577,12 +578,20 @@ const IN_APP_WEBVIEW = (() => {
   return /micromessenger|xhs|xhsdiscover|discover\/|tiktok|aweme|weibo|qq\/|qqbrowser|alipayclient|dingtalk|lark|feishu|ucbrowser|baiduboxapp|toutiao|newsarticle/.test(ua);
 })();
 
+function buildXhsSearchUrl(keyword) {
+  return `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(keyword.trim())}&source=web_explore_feed`;
+}
 function xhsKeyword(loc) {
   if(loc.xhsKeyword) return loc.xhsKeyword.trim();
   return (loc.name||'').replace(/⭐.*$/g,'').replace(/（.*?）/g,'').replace(/\(.*?\)/g,'').replace(/\s+/g,' ').trim();
 }
 function xhsAppUrl(loc) { return `xhsdiscover://search/result?keyword=${encodeURIComponent(xhsKeyword(loc))}&target_search=notes&source=deeplink`; }
-function xhsWebUrl(loc) { return `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(xhsKeyword(loc))}&source=web_explore_feed`; }
+function xhsWebUrl(loc) { return loc.xhs || buildXhsSearchUrl(xhsKeyword(loc)); }
+function xhsLinkUrl(loc) { return IN_APP_WEBVIEW ? xhsWebUrl(loc) : xhsAppUrl(loc); }
+
+DAYS.forEach(d => d.locations.forEach(l => {
+  if(!l.xhs && l.xhsKeyword) l.xhs = buildXhsSearchUrl(l.xhsKeyword);
+}));
 
 function dpKeyword(loc) {
   if(loc.dianpingKeyword) return loc.dianpingKeyword.trim();
@@ -615,7 +624,7 @@ function locCard(loc, dayIdx) {
   const gmapQ = loc.gmap||encodeURIComponent(loc.name+' Xinjiang China');
   let lnk = `<button class="btn nav" onclick="openAS('${loc.name.replace(/'/g,"\\'")}',${loc.lat},${loc.lng},'${gmapQ}')">📍 导航</button>`;
   if(loc.xhs||loc.xhsKeyword) {
-    const xhsHref = IN_APP_WEBVIEW ? xhsWebUrl(loc) : xhsAppUrl(loc);
+    const xhsHref = xhsLinkUrl(loc);
     const xhsLabel = IN_APP_WEBVIEW ? '📕 小红书' : '📕 小红书 App';
     lnk += `<a href="${xhsHref}" onclick="return openXhs('${locKey.replace(/'/g,"\\'")}')" class="btn xhs">${xhsLabel}</a>`;
   }
