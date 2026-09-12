@@ -197,6 +197,15 @@ a:hover { text-decoration: underline; }
 .btn.xhs    { background: #ff2442; color: #fff; }
 .btn.dp     { background: #ffa700; color: #fff; }
 .btn.rsv    { background: var(--tint-green); color: #fff; }
+.toast {
+  position: fixed; left: 16px; right: 16px; bottom: calc(18px + var(--safe-bottom));
+  z-index: 10000; padding: 12px 14px; border-radius: var(--radius-md);
+  background: rgba(29,29,31,.92); color: #fff; text-align: center;
+  font-size: 14px; line-height: 1.45; box-shadow: var(--shadow-lg);
+  opacity: 0; transform: translateY(12px); pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
 
 /* Action Sheet */
 .as-overlay {
@@ -317,7 +326,7 @@ const DAYS = [
     route: '民宿 -> 夏塔景区 -> 区间车 -> 温泉 -> 将军桥终点 -> 民宿\n短途30km / 全天步行和区间车',
     risk: '控制返程时间，保存次日赶路体力。景区末班车、天气、体力三项优先。',
     locations: [
-      { name: '夏塔景区游客中心', lat: 42.830, lng: 80.670, type: 'transport', time: '早上', desc: '尽早进景区，减少排队和返程压力。', detail: '身份证、保暖衣、雨具、零食和水随身。若景区调整区间车时间，以当天公告为准。', reserve: 'https://www.xiaohongshu.com/search_result?keyword=%E5%A4%8F%E5%A1%94%E6%99%AF%E5%8C%BA%E9%97%A8%E7%A5%A8', xhsKeyword: '夏塔 景区 区间车' },
+      { name: '夏塔景区游客中心', lat: 42.830, lng: 80.670, type: 'transport', time: '早上', desc: '尽早进景区，减少排队和返程压力。', detail: '身份证、保暖衣、雨具、零食和水随身。若景区调整区间车时间，以当天公告为准。', xhsKeyword: '夏塔 景区 区间车' },
       { name: '夏塔温泉站', lat: 42.785, lng: 80.721, type: 'spot', time: '上午', desc: '区间车后进入山谷景观段。', detail: '这里开始体感温度明显下降，先加衣再走。', xhsKeyword: '夏塔 温泉 将军桥' },
       { name: '将军桥终点', lat: 42.748, lng: 80.778, type: 'spot', time: '中午', desc: '直面木扎尔特冰川，是当天必到点。', detail: '往返约8km轻徒步。8人不要分散太远，不往卡拉房子深处硬走。', xhsKeyword: '夏塔 将军桥 木扎尔特冰川' },
       { name: '夏塔乡晚餐', lat: 42.899, lng: 80.780, type: 'food', time: '晚上', desc: '回民宿或乡里简餐，早点休息。', budget: '民宿晚餐/简餐', detail: '第二天要走伊昭到伊宁，这晚不要熬夜。', dianpingKeyword: '夏塔乡 餐厅' },
@@ -652,7 +661,12 @@ function showDay(idx) {
     if(!l.lat) return;
     const m = L.marker(mapLatLng(l.lat,l.lng), { icon: icon(day.color, emojis[l.type]||'📌') }).addTo(map);
     const gmapQ = l.gmap||encodeURIComponent(l.name+' Xinjiang China');
-    const xhsPopup = (l.xhs||l.xhsKeyword) ? ` · <a href="${xhsWebUrl(l)}" target="_blank">${isXhsNoteUrl(l.xhs) ? '📕 小红书笔记' : '📕 小红书参考'}</a>` : '';
+    const locKey = `${day.id}::${l.name}`;
+    const xhsPopup = (l.xhs||l.xhsKeyword)
+      ? (isXhsNoteUrl(l.xhs)
+        ? ` · <a href="${l.xhs}" target="_blank">📕 小红书笔记</a>`
+        : ` · <a href="#" onclick='event.preventDefault();copyXhsKeyword(${JSON.stringify(locKey)})'>📕 复制小红书词</a>`)
+      : '';
     m.bindPopup(`<b>${l.name}</b>${l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':''}<br>${l.desc}${l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':''}<br><a href="#" onclick="event.preventDefault();openAS('${l.name.replace(/'/g,"\\'")}',${l.lat},${l.lng},'${gmapQ}')">📍 导航</a>${xhsPopup}`);
     markers.push(m);
     if(l.time!=='—') coords.push(mapLatLng(l.lat,l.lng));
@@ -678,21 +692,11 @@ const IN_APP_WEBVIEW = (() => {
   return /micromessenger|xhs|xhsdiscover|discover\/|tiktok|aweme|weibo|qq\/|qqbrowser|alipayclient|dingtalk|lark|feishu|ucbrowser|baiduboxapp|toutiao|newsarticle/.test(ua);
 })();
 
-function buildXhsSearchUrl(keyword) {
-  return `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(keyword.trim())}&source=web_explore_feed`;
-}
 function xhsKeyword(loc) {
   if(loc.xhsKeyword) return loc.xhsKeyword.trim();
   return (loc.name||'').replace(/⭐.*$/g,'').replace(/（.*?）/g,'').replace(/\(.*?\)/g,'').replace(/\s+/g,' ').trim();
 }
-function xhsAppUrl(loc) { return `xhsdiscover://search/result?keyword=${encodeURIComponent(xhsKeyword(loc))}&target_search=notes&source=deeplink`; }
-function xhsWebUrl(loc) { return loc.xhs || buildXhsSearchUrl(xhsKeyword(loc)); }
-function xhsLinkUrl(loc) { return IN_APP_WEBVIEW ? xhsWebUrl(loc) : xhsAppUrl(loc); }
 function isXhsNoteUrl(url) { return /xiaohongshu\.com\/explore\//.test(url || ''); }
-
-DAYS.forEach(d => d.locations.forEach(l => {
-  if(!l.xhs && l.xhsKeyword) l.xhs = buildXhsSearchUrl(l.xhsKeyword);
-}));
 
 function dpKeyword(loc) {
   if(loc.dianpingKeyword) return loc.dianpingKeyword.trim();
@@ -707,14 +711,51 @@ window._xhsLocs = window._extLocs;
 
 function openExt(key, kind) {
   const loc = window._extLocs[key]; if(!loc) return false;
+  if(kind==='xhs' && !isXhsNoteUrl(loc.xhs)) return copyXhsKeyword(key);
   const target = kind==='dp'
     ? (IN_APP_WEBVIEW ? dpWebUrl(loc) : dpAppUrl(loc))
-    : (loc.xhs || (IN_APP_WEBVIEW ? xhsWebUrl(loc) : xhsAppUrl(loc)));
+    : loc.xhs;
   window.location.href = target;
   return false;
 }
 function openXhs(key) { return openExt(key, 'xhs'); }
 function openDp(key)  { return openExt(key, 'dp'); }
+
+function showToast(message) {
+  let el = document.getElementById('toast');
+  if(!el) {
+    el = document.createElement('div');
+    el.id = 'toast';
+    el.className = 'toast';
+    document.body.appendChild(el);
+  }
+  el.textContent = message;
+  el.classList.add('show');
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+function copyText(text) {
+  if(navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } finally { document.body.removeChild(ta); }
+  return Promise.resolve();
+}
+
+function copyXhsKeyword(key) {
+  const loc = window._extLocs[key]; if(!loc) return false;
+  const keyword = xhsKeyword(loc);
+  copyText(keyword)
+    .then(() => showToast(`已复制：${keyword}；打开小红书 App 搜索即可`))
+    .catch(() => showToast(`请在小红书 App 搜索：${keyword}`));
+  return false;
+}
 
 function locCard(loc, dayIdx) {
   const dot = loc.type==='food'?'food':loc.type==='spot'?'spot':loc.type==='drink'?'drink':loc.type==='hotel'?'hotel':'transport';
@@ -724,9 +765,11 @@ function locCard(loc, dayIdx) {
   const gmapQ = loc.gmap||encodeURIComponent(loc.name+' Xinjiang China');
   let lnk = `<button class="btn nav" onclick="openAS('${loc.name.replace(/'/g,"\\'")}',${loc.lat},${loc.lng},'${gmapQ}')">📍 导航</button>`;
   if(loc.xhs||loc.xhsKeyword) {
-    const xhsHref = xhsLinkUrl(loc);
-    const xhsLabel = isXhsNoteUrl(loc.xhs) ? '📕 小红书笔记' : '📕 小红书参考';
-    lnk += `<a href="${xhsHref}" onclick="return openXhs('${locKey.replace(/'/g,"\\'")}')" class="btn xhs">${xhsLabel}</a>`;
+    if(isXhsNoteUrl(loc.xhs)) {
+      lnk += `<a href="${loc.xhs}" onclick="return openXhs('${locKey.replace(/'/g,"\\'")}')" class="btn xhs">📕 小红书笔记</a>`;
+    } else {
+      lnk += `<button class="btn xhs" onclick="return copyXhsKeyword('${locKey.replace(/'/g,"\\'")}')">📕 复制小红书词</button>`;
+    }
   }
   const dpEnabled = loc.dianping !== false &&
     (loc.dianping || loc.dianpingKeyword || loc.type==='food' || loc.type==='drink');
