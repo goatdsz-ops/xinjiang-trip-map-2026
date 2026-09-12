@@ -290,9 +290,9 @@ const DAYS = [
     risk: '落地日轻手执行。若航班晚点，优先保克勒涌珠和南门出湖，果子沟大桥挪到次日。',
     locations: [
       { name: '博乐阿拉山口机场', lat: 44.895, lng: 82.300, type: 'transport', time: '落地', desc: '惠州一行人落地集合，取车、检查行李和补给。', detail: '8人建议两台7座及以下车辆，确认后备箱容量、备胎、充电线、对讲或群定位。', gmap: 'Bole+Alashankou+Airport' },
-      { name: '赛里木湖东门', lat: 44.617, lng: 81.392, type: 'spot', time: '下午', desc: '东门进入，开始环湖精华段。', detail: '湖边风大温差大，车上直接备冲锋衣、薄羽绒、帽子和墨镜。', xhsKeyword: '赛里木湖 东门 环湖' },
-      { name: '克勒涌珠', lat: 44.563, lng: 81.181, type: 'spot', time: '傍晚', desc: '当天必停点，适合看湖面、雪山和日落光线。', detail: '如果当天时间被压缩，只保留这里和南门出湖，不再绕远端点将台。', xhsKeyword: '赛里木湖 克勒涌珠' },
-      { name: '果子沟民宿区', lat: 44.432, lng: 80.944, type: 'hotel', time: '夜宿', desc: '不住景区内，降低住宿成本和订房压力。', detail: '晚餐优先民宿解决，车上保留饮用水、零食和热量补给。', gmap: '果子沟 民宿' }
+      { name: '赛里木湖东门', lat: 44.617, lng: 81.392, type: 'spot', time: '下午', desc: '东门进入，开始环湖精华段。', detail: '湖边风大温差大，车上直接备冲锋衣、薄羽绒、帽子和墨镜。', xhs: 'https://www.xiaohongshu.com/explore/6a2520e0000000000701132e?xsec_token=ABQPQHcnOT2qlZ4oYFh3j87xmhx-t__lKHrQNFON_xGAc=&xsec_source=pc_search&source=web_search_result_notes', xhsKeyword: '赛里木湖 东门 环湖' },
+      { name: '克勒涌珠', lat: 44.563, lng: 81.181, type: 'spot', time: '傍晚', desc: '当天必停点，适合看湖面、雪山和日落光线。', detail: '如果当天时间被压缩，只保留这里和南门出湖，不再绕远端点将台。', xhs: 'https://www.xiaohongshu.com/explore/6a566b1a000000000f0163ef?xsec_token=ABDotna69wnoze8NAq177jgsRN2eHnZ1tdh9lSjerZ-rs=&xsec_source=pc_search&source=web_search_result_notes', xhsKeyword: '赛里木湖 克勒涌珠' },
+      { name: '果子沟民宿区', lat: 44.432, lng: 80.944, type: 'hotel', time: '夜宿', desc: '不住景区内，降低住宿成本和订房压力。', detail: '晚餐优先民宿解决，车上保留饮用水、零食和热量补给。', xhs: 'https://www.xiaohongshu.com/explore/69f6be0d00000000350263e9?xsec_token=ABy1KEYcvX09WmqaekmvZ_4wm1fCW2w4KL-bBeYaYMJ5w=&xsec_source=pc_search&source=web_search_result_notes', xhsKeyword: '果子沟 民宿', gmap: '果子沟 民宿' }
     ]
   },
   {
@@ -393,10 +393,10 @@ const DAYS = [
     locations: [
       { name: '喀什出发', lat: 39.470, lng: 75.995, type: 'transport', time: '07:30', desc: '早出发，争取白沙湖上午顺光。', detail: '车上备路餐、水、氧气或便携氧、晕车药和保暖衣。边防证建议在出发前办妥并截图/保存到相册。', xhs: 'https://www.xiaohongshu.com/explore/6a81648d0000000027020d0b', xhsKeyword: '帕米尔高原 边防证 办理流程', gmap: '喀什古城 东门' },
       { name: '奥依塔克红山谷', lat: 39.865, lng: 75.221, type: 'spot', time: '—', desc: '可选支线，时间紧或天气差就放弃。', detail: '帕米尔段主线是白沙湖和喀拉库勒湖，不要被支线打乱节奏。', xhsKeyword: '奥依塔克红山谷' },
-      { name: '白沙湖', lat: 38.246, lng: 75.639, type: 'spot', time: '上午', desc: '白沙山与湖面，是帕米尔首个核心景观。', detail: '风大、紫外线强，短停也要帽子、墨镜、防晒。', xhsKeyword: '白沙湖 帕米尔 上午顺光' },
-      { name: '塔合曼湿地', lat: 37.949, lng: 75.181, type: 'spot', time: '下午', desc: '雪山背景下的湿地和开阔地貌。', detail: '如全员状态一般，可减少下车停留，给营地和日落留体力。', xhsKeyword: '塔合曼湿地 慕士塔格峰' },
-      { name: '喀拉库勒湖', lat: 38.435, lng: 75.053, type: 'spot', time: '傍晚', desc: '看慕士塔格峰、湖面和日落。', detail: '已经在高海拔，所有人动作放慢。出现持续头痛、恶心、胸闷者不要硬扛。', xhsKeyword: '喀拉库勒湖 慕士塔格峰 日落' },
-      { name: '不周山营地', lat: 38.431, lng: 75.048, type: 'hotel', time: '夜宿', desc: '唯一一晚高原营地，带地暖和制氧机。', detail: '价格偏高但体验强。若队里有人高反风险高，建议改住塔县供氧酒店。', gmap: '喀拉库勒湖 不周山营地' }
+      { name: '白沙湖', lat: 38.246, lng: 75.639, type: 'spot', time: '上午', desc: '白沙山与湖面，是帕米尔首个核心景观。', detail: '风大、紫外线强，短停也要帽子、墨镜、防晒。', xhs: 'https://www.xiaohongshu.com/explore/6aa3f5d4000000002600a05f?xsec_token=CBHTCRGM81_IvxCNAfBpeoYsZtCUIIGMoGVnaa0f39GQw=&xsec_source=app_share', xhsLinks: ['https://www.xiaohongshu.com/explore/6a7403c5000000003303123e?xsec_token=ABziRa7fT231kPzHiXKgoaW63DJXjMMiYVHTW9DdhNWGM=&xsec_source=pc_search&source=web_explore_feed'], xhsKeyword: '白沙湖 帕米尔 上午顺光' },
+      { name: '塔合曼湿地', lat: 37.949, lng: 75.181, type: 'spot', time: '下午', desc: '雪山背景下的湿地和开阔地貌。', detail: '如全员状态一般，可减少下车停留，给营地和日落留体力。', xhsLinks: ['https://www.xiaohongshu.com/explore/6a9a7c0d00000000270163b1?xsec_token=ABJIOj6dv_-b8k3HTHobaO0D3CF7kjKwaVPm9ogLBXVLA=&xsec_source=pc_search&source=web_explore_feed', 'https://www.xiaohongshu.com/explore/6a912ad6000000001f01cde5?xsec_token=ABVImPrQ58kn6lIcuJW-xJdzFVMstUJhYP_kWN6lfZnnI=&xsec_source=pc_search&source=web_explore_feed', 'https://www.xiaohongshu.com/explore/6a96aafe00000000280352db?xsec_token=AB14HOQXO15n5GyvmJs2mk7F4PWZdOFontFf3Gs8GKU_c=&xsec_source=pc_search&source=web_explore_feed'], xhsKeyword: '塔合曼湿地 慕士塔格峰' },
+      { name: '喀拉库勒湖', lat: 38.435, lng: 75.053, type: 'spot', time: '傍晚', desc: '看慕士塔格峰、湖面和日落。', detail: '已经在高海拔，所有人动作放慢。出现持续头痛、恶心、胸闷者不要硬扛。', xhsLinks: ['https://www.xiaohongshu.com/explore/6a8191450000000027023c3b?xsec_token=AB401AzkWXuBC6VmwZsQFRSUJsFHxL7bZXDwii-fUgVxc=&xsec_source=pc_search&source=web_explore_feed', 'https://www.xiaohongshu.com/explore/6a3c78b20000000021014bcb?xsec_token=ABtOJlGOIgeyI3PG05a1Ny5TEmj_CRMmfeRTmrwPe_cmo=&xsec_source=pc_search&source=web_explore_feed'], xhsKeyword: '喀拉库勒湖 慕士塔格峰 日落' },
+      { name: '不周山营地', lat: 38.431, lng: 75.048, type: 'hotel', time: '夜宿', desc: '唯一一晚高原营地，带地暖和制氧机。', detail: '价格偏高但体验强。若队里有人高反风险高，建议改住塔县供氧酒店。', xhsLinks: ['https://www.xiaohongshu.com/explore/6a5b8bb3000000000100f2a9?xsec_token=AB6ZQDbEyxmcCxuI1wflTvhVK7VNQAVni21iXeF9LXquw=&xsec_source=pc_search&source=web_explore_feed', 'https://www.xiaohongshu.com/explore/69c3fa8d0000000023020010?xsec_token=ABsz5lDoksyxC9PtSrTdkeijQGBEUdJs-Qm-voUV37RM8=&xsec_source=pc_search&source=web_explore_feed', 'https://www.xiaohongshu.com/explore/68e8c5af0000000003019ca3?xsec_token=ABlu7Ny1Y9jtSpmnPFJ1A_u91OSe7uIqeGDsoW4BOwkTY=&xsec_source=pc_search&source=web_explore_feed'], xhsKeyword: '不周山营地 喀拉库勒湖', gmap: '喀拉库勒湖 不周山营地' }
     ]
   },
   {
@@ -405,11 +405,11 @@ const DAYS = [
     route: '不周山 -> 塔县 -> 盘龙古道大盘龙进小盘龙出 -> 班迪尔蓝湖 -> 塔县\n180km / 行车约4h + 全天游玩',
     risk: '从3600m下到3200m仍属高原。避免剧烈运动，盘龙古道不适合赶时间。',
     locations: [
-      { name: '不周山营地出发', lat: 38.431, lng: 75.048, type: 'transport', time: '早上', desc: '观察全员睡眠和高反状态后再出发。', detail: '若有人明显不适，直接去塔县休整，放弃盘龙古道。', gmap: '喀拉库勒湖 不周山营地' },
-      { name: '塔什库尔干县城', lat: 37.775, lng: 75.229, type: 'food', time: '中午', desc: '塔县本地简餐、补给、确认酒店。', budget: '县城简餐', detail: '边防证和身份证仍要随身。', dianpingKeyword: '塔什库尔干 餐厅' },
-      { name: '盘龙古道入口', lat: 37.685, lng: 75.150, type: 'spot', time: '下午', desc: '600余弯全景，车技和天气都要稳。', detail: '大盘龙进小盘龙出。司机不疲劳、不抢拍、不压线。', xhsKeyword: '盘龙古道 大盘龙 小盘龙' },
-      { name: '班迪尔蓝湖', lat: 37.919, lng: 75.006, type: 'spot', time: '傍晚', desc: '高原宝石蓝湖泊，是当天拍照点。', detail: '风大温低，控制停留时间。', xhsKeyword: '班迪尔蓝湖 塔县' },
-      { name: '塔县供氧酒店', lat: 37.775, lng: 75.229, type: 'hotel', time: '夜宿', desc: '回塔县住供氧酒店。', detail: '睡前少洗热水澡、少饮酒，继续观察高反。', gmap: '塔县 供氧酒店' }
+      { name: '不周山营地出发', lat: 38.431, lng: 75.048, type: 'transport', time: '早上', desc: '观察全员睡眠和高反状态后再出发。', detail: '若有人明显不适，直接去塔县休整，放弃盘龙古道。', xhs: 'https://www.xiaohongshu.com/explore/6aa12ea70000000026039f82?xsec_token=ABktQotE634mnwS-z-_AMZ3REERswY9k0J_6ussu3mWJM=&xsec_source=pc_search&source=web_explore_feed', xhsKeyword: '不周山营地 出发', gmap: '喀拉库勒湖 不周山营地' },
+      { name: '塔什库尔干县城', lat: 37.775, lng: 75.229, type: 'food', time: '中午', desc: '塔县本地简餐、补给、确认酒店。', budget: '县城简餐', detail: '边防证和身份证仍要随身。', xhsLinks: ['https://www.xiaohongshu.com/explore/6a9a7c0d00000000270163b1?xsec_token=ABJIOj6dv_-b8k3HTHobaO0D3CF7kjKwaVPm9ogLBXVLA=&xsec_source=pc_search&source=web_explore_feed', 'https://www.xiaohongshu.com/explore/6a6f388a0000000033030368?xsec_token=ABz7bUoDrDiOW52iVYp8prlob5zxcyvvRvoyhPM8O_bh0=&xsec_source=pc_search&source=web_explore_feed'], xhsKeyword: '塔什库尔干县城 餐厅', dianpingKeyword: '塔什库尔干 餐厅' },
+      { name: '盘龙古道入口', lat: 37.685, lng: 75.150, type: 'spot', time: '下午', desc: '600余弯全景，车技和天气都要稳。', detail: '大盘龙进小盘龙出。司机不疲劳、不抢拍、不压线。', xhsLinks: ['https://www.xiaohongshu.com/explore/6aa2b3a9000000002502ee2e?xsec_token=ABjCrNLrQeiv_myFDu0jZrmuJR_Yp6yvqaQglLJcc_hQY=&xsec_source=pc_search&source=web_explore_feed', 'https://www.xiaohongshu.com/explore/6a40bbe8000000001101eae0?xsec_token=AB-yJW_Zzx6Y_R9t2_xoM_2O2KWK72b0hUgJq0PchEyXU=&xsec_source=pc_search&source=web_explore_feed'], xhsKeyword: '盘龙古道 大盘龙 小盘龙' },
+      { name: '班迪尔蓝湖', lat: 37.919, lng: 75.006, type: 'spot', time: '傍晚', desc: '高原宝石蓝湖泊，是当天拍照点。', detail: '风大温低，控制停留时间。', xhs: 'https://www.xiaohongshu.com/explore/6a9500180000000004008306?xsec_token=ABl6kM4EfIIyq5BAi2XEKeSnHnrixfeWElW8j8eJ4J2Hg=&xsec_source=pc_search&source=web_explore_feed', xhsKeyword: '班迪尔蓝湖 塔县' },
+      { name: '塔县供氧酒店', lat: 37.775, lng: 75.229, type: 'hotel', time: '夜宿', desc: '回塔县住供氧酒店。', detail: '睡前少洗热水澡、少饮酒，继续观察高反。', xhsLinks: ['https://www.xiaohongshu.com/explore/6a3efe05000000001702c7c1?xsec_token=ABSsxn0avJ9VtFUzuZbv9SZCICbn2DUatSrnYaw4dPKP0=&xsec_source=pc_search&source=web_explore_feed', 'https://www.xiaohongshu.com/explore/6a226ea70000000036032975?xsec_token=ABHpfXjycfG7dd1iRFysrANGSzeJ__v5BB_St2aN4mS1w=&xsec_source=pc_search&source=web_explore_feed'], xhsKeyword: '塔县供氧酒店', gmap: '塔县 供氧酒店' }
     ]
   },
   {
@@ -432,7 +432,7 @@ const DAYS = [
     risk: '表格写全天深度古城偏乐观，实际是下午加夜景。早出发，把完整下午留给古城。',
     locations: [
       { name: '塔县出发', lat: 37.775, lng: 75.229, type: 'transport', time: '早上', desc: '下撤低海拔，降低高反累积风险。', detail: '如遇返程路段管制，优先保证回喀什和次日航班。', gmap: '塔什库尔干' },
-      { name: 'G314帕米尔返程观景点', lat: 38.246, lng: 75.639, type: 'spot', time: '中午', desc: '返程可短停复看白沙湖/公路景观。', detail: '只短停，不再拉支线。', xhsKeyword: 'G314 帕米尔 返程 白沙湖' },
+      { name: 'G314帕米尔返程观景点', lat: 38.246, lng: 75.639, type: 'spot', time: '中午', desc: '返程可短停复看白沙湖/公路景观。', detail: '只短停，不再拉支线。', xhs: 'https://www.xiaohongshu.com/explore/6aa3f5d4000000002600a05f?xsec_token=CBHTCRGM81_IvxCNAfBpeoYsZtCUIIGMoGVnaa0f39GQw=&xsec_source=app_share', xhsKeyword: 'G314 帕米尔 返程 白沙湖' },
       { name: '喀什古城开城仪式', lat: 39.470, lng: 75.995, type: 'spot', time: '—', desc: '若下午赶不上，可放到9.27上午，视航班时间决定。', detail: '不要为了仪式压缩返程安全时间。', xhsKeyword: '喀什古城 开城仪式 时间' },
       { name: '百年老茶馆', lat: 39.473, lng: 75.989, type: 'drink', time: '下午', desc: '古城轻逛和休息点。', budget: '茶饮/小吃', detail: '步行多，穿舒适鞋。', xhsKeyword: '喀什 百年老茶馆', dianpingKeyword: '喀什 百年老茶馆' },
       { name: '喀什古城夜市', lat: 39.470, lng: 75.995, type: 'food', time: '晚上', desc: '古城特色餐和夜市小吃。', budget: '夜市小吃', detail: '8人可分散买、集中吃；注意肠胃和第二天航班。', dianpingKeyword: '喀什古城 夜市' },
@@ -662,9 +662,10 @@ function showDay(idx) {
     const m = L.marker(mapLatLng(l.lat,l.lng), { icon: icon(day.color, emojis[l.type]||'📌') }).addTo(map);
     const gmapQ = l.gmap||encodeURIComponent(l.name+' Xinjiang China');
     const locKey = `${day.id}::${l.name}`;
-    const xhsPopup = (l.xhs||l.xhsKeyword)
-      ? (isXhsNoteUrl(l.xhs)
-        ? ` · <a href="${l.xhs}" target="_blank">📕 小红书笔记</a>`
+    const xhsUrls = xhsNoteLinks(l);
+    const xhsPopup = (xhsUrls.length || l.xhsKeyword)
+      ? (xhsUrls.length
+        ? xhsUrls.map((url, i) => ` · <a href="${url}" target="_blank">📕 小红书笔记${i ? i + 1 : ''}</a>`).join('')
         : ` · <a href="#" onclick='event.preventDefault();copyXhsKeyword(${JSON.stringify(locKey)})'>📕 复制小红书词</a>`)
       : '';
     m.bindPopup(`<b>${l.name}</b>${l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':''}<br>${l.desc}${l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':''}<br><a href="#" onclick="event.preventDefault();openAS('${l.name.replace(/'/g,"\\'")}',${l.lat},${l.lng},'${gmapQ}')">📍 导航</a>${xhsPopup}`);
@@ -697,6 +698,14 @@ function xhsKeyword(loc) {
   return (loc.name||'').replace(/⭐.*$/g,'').replace(/（.*?）/g,'').replace(/\(.*?\)/g,'').replace(/\s+/g,' ').trim();
 }
 function isXhsNoteUrl(url) { return /xiaohongshu\.com\/explore\//.test(url || ''); }
+function xhsNoteLinks(loc) {
+  const urls = [];
+  if(isXhsNoteUrl(loc.xhs)) urls.push(loc.xhs);
+  if(Array.isArray(loc.xhsLinks)) loc.xhsLinks.forEach(url => {
+    if(isXhsNoteUrl(url) && !urls.includes(url)) urls.push(url);
+  });
+  return urls;
+}
 
 function dpKeyword(loc) {
   if(loc.dianpingKeyword) return loc.dianpingKeyword.trim();
@@ -764,9 +773,12 @@ function locCard(loc, dayIdx) {
   const locKey = `${dayIdx}::${loc.name}`;
   const gmapQ = loc.gmap||encodeURIComponent(loc.name+' Xinjiang China');
   let lnk = `<button class="btn nav" onclick="openAS('${loc.name.replace(/'/g,"\\'")}',${loc.lat},${loc.lng},'${gmapQ}')">📍 导航</button>`;
-  if(loc.xhs||loc.xhsKeyword) {
-    if(isXhsNoteUrl(loc.xhs)) {
-      lnk += `<a href="${loc.xhs}" onclick="return openXhs('${locKey.replace(/'/g,"\\'")}')" class="btn xhs">📕 小红书笔记</a>`;
+  const xhsUrls = xhsNoteLinks(loc);
+  if(xhsUrls.length||loc.xhsKeyword) {
+    if(xhsUrls.length) {
+      xhsUrls.forEach((url, i) => {
+        lnk += `<a href="${url}" target="_blank" class="btn xhs">📕 小红书笔记${i ? i + 1 : ''}</a>`;
+      });
     } else {
       lnk += `<button class="btn xhs" onclick="return copyXhsKeyword('${locKey.replace(/'/g,"\\'")}')">📕 复制小红书词</button>`;
     }
