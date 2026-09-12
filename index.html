@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -58,6 +57,36 @@ a:hover { text-decoration: underline; }
 
 /* ── Map ── */
 #map { width: 100%; height: 40vh; min-height: 280px; position: sticky; top: 0; z-index: 100; }
+.offline-map-panel {
+  height: 100%; overflow: auto; padding: calc(14px + var(--safe-top)) 16px 16px;
+  background: linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 100%);
+  border-bottom: .5px solid var(--separator);
+}
+.offline-map-panel h3 { font-size: 18px; line-height: 1.25; margin-bottom: 6px; letter-spacing: 0; }
+.offline-map-panel p { font-size: 13px; color: var(--text-secondary); line-height: 1.45; }
+.offline-route { display: grid; gap: 8px; margin-top: 12px; }
+.offline-stop {
+  background: rgba(255,255,255,.86); border: .5px solid var(--separator);
+  border-radius: var(--radius-sm); padding: 10px 11px; box-shadow: var(--shadow-sm);
+}
+.offline-stop .stop-top { display: flex; gap: 8px; align-items: baseline; justify-content: space-between; }
+.offline-stop .stop-name { font-size: 14px; font-weight: 700; line-height: 1.3; }
+.offline-stop .stop-time { flex-shrink: 0; font-size: 11px; color: var(--text-tertiary); font-weight: 700; }
+.offline-stop .stop-desc { margin-top: 3px; font-size: 12px; color: var(--text-secondary); }
+.offline-stop .stop-coord { margin-top: 5px; font-size: 11px; color: var(--text-tertiary); word-break: break-all; }
+.offline-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.offline-pill {
+  display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 9px;
+  background: rgba(0,113,227,.1); color: var(--accent); font-size: 12px; font-weight: 700;
+}
+.offline-pill.warn { background: rgba(255,149,0,.13); color: #b65f00; }
+.offline-pill.danger { background: rgba(255,59,48,.1); color: var(--tint-red); }
+.emergency-box {
+  background: #fff8e6; border: .5px solid rgba(255,149,0,.28);
+  border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px;
+  font-size: 13px; line-height: 1.6; color: #6b4300;
+}
+.emergency-box strong { color: #4f3200; }
 .locate-btn {
   width: 36px; height: 36px; border-radius: 8px;
   background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
@@ -423,6 +452,7 @@ function overviewContent() {
   <div class="info-card"><div class="label">最高风险</div><div class="value">D6 伊宁到库车，建议拆分</div></div>
   <div class="info-card"><div class="label">硬确认</div><div class="value">边防证、伊昭/独库/精伊牧道通行</div></div>
 </div>
+<div class="emergency-box"><strong>弱网应急</strong><br>出发前先打开本页一次，并在高德地图下载新疆离线地图、收藏每日住宿和关键景点。若底图加载失败，顶部会自动切换为离线路线卡；小红书、在线底图和实时导航仍需要网络。</div>
 <div class="section-head">行程概览</div>
 <div class="day-list">${DAYS.slice(1).map(d=>`<div class="card" onclick="go(${d.id})"><div class="name"><span class="dot" style="background:${d.color}"></span>${d.label} · ${d.title}</div><div class="desc">${d.date}</div></div>`).join('')}</div>
 <div class="section-head">执行提醒</div>
@@ -480,58 +510,108 @@ function mapLatLng(lat, lng) {
 }
 
 const mapCenter = HOTEL.lat ? mapLatLng(HOTEL.lat, HOTEL.lng) : mapLatLng(41.7, 82.9);
-const map = L.map('map', { center: mapCenter, zoom: 6, zoomControl: false, attributionControl: true });
-L.control.zoom({ position: 'topright' }).addTo(map);
-L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
-  maxZoom: 18,
-  subdomains: ['1','2','3','4'],
-  attribution: '地图 © 高德'
-}).addTo(map);
+const mapEl = document.getElementById('map');
+const HAS_LEAFLET = typeof window.L !== 'undefined';
+let map = null, tileLayer = null, locMarker, locCircle;
+let markers = [], polylines = [], tileErrorCount = 0, cur = 0;
+const emojis = { food:'🍽️', spot:'📍', hotel:'🏨', transport:'🚃', drink:'🍺' };
 
-/* ── Geolocation ── */
-const LocateControl = L.Control.extend({
-  options: { position: 'bottomright' },
-  onAdd() {
-    const btn = L.DomUtil.create('button', 'locate-btn');
-    btn.innerHTML = '📍';
-    btn.title = '我的位置';
-    L.DomEvent.disableClickPropagation(btn);
-    btn.addEventListener('click', () => {
-      btn.classList.add('active');
-      map.locate({ setView: true, maxZoom: 15 });
-    });
-    this._btn = btn;
-    return btn;
-  }
-});
-new LocateControl().addTo(map);
-let locMarker, locCircle;
-map.on('locationfound', e => {
-  const r = e.accuracy / 2;
-  const ll = mapLatLng(e.latlng.lat, e.latlng.lng);
-  if (locMarker) { locMarker.setLatLng(ll); locCircle.setLatLng(ll).setRadius(r); }
-  else {
-    locMarker = L.marker(ll, {
-      icon: L.divIcon({ className:'', html:'<div style="width:14px;height:14px;border-radius:50%;background:#007aff;border:2.5px solid #fff;box-shadow:0 0 6px rgba(0,122,255,.5)"></div><div class="loc-pulse" style="position:absolute;top:0;left:0"></div>', iconSize:[14,14], iconAnchor:[7,7] }),
-      zIndexOffset: 2000
-    }).addTo(map);
-    locCircle = L.circle(ll, { radius: r, color: '#007aff', fillColor: '#007aff', fillOpacity: .08, weight: 1 }).addTo(map);
-  }
-});
-map.on('locationerror', () => {});
+function escapeHtml(v) {
+  return String(v ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+}
+function navKeyword(loc) {
+  return String(loc.gmap || `${loc.name} Xinjiang China`).replace(/\+/g, ' ');
+}
+function coordText(loc) {
+  if(!loc.lat || !loc.lng) return '坐标待补';
+  return `${loc.lat.toFixed(5)}, ${loc.lng.toFixed(5)}`;
+}
+function renderOfflineMap(idx, reason) {
+  const day = idx === 0 ? null : DAYS.find(d => d.id === idx);
+  const title = day ? `${day.label} · ${day.title}` : '离线应急行程';
+  const stops = (day ? day.locations.filter(l => l.time !== '—') : DAYS.slice(1).flatMap(d => d.locations.filter(l => l.time !== '—').slice(0, 1).map(l => ({...l, dayLabel: d.label}))));
+  const stopHtml = stops.map(l => `<div class="offline-stop">
+    <div class="stop-top"><div class="stop-name">${escapeHtml(l.dayLabel ? `${l.dayLabel} ${l.name}` : l.name)}</div><div class="stop-time">${escapeHtml(l.time)}</div></div>
+    <div class="stop-desc">${escapeHtml(l.desc)}</div>
+    <div class="stop-coord">坐标 ${coordText(l)} ｜ 搜索 ${escapeHtml(navKeyword(l))}</div>
+  </div>`).join('');
+  mapEl.innerHTML = `<div class="offline-map-panel">
+    <h3>${escapeHtml(title)}</h3>
+    <p>${escapeHtml(reason || '地图底图不可用时，用这里查看当天顺序、坐标和导航关键词。提前在高德收藏关键点更稳。')}</p>
+    <div class="offline-actions">
+      <span class="offline-pill">可离线查看文字行程</span>
+      <span class="offline-pill warn">底图/小红书需联网</span>
+      ${idx === 6 ? '<span class="offline-pill danger">D6建议拆分</span>' : ''}
+    </div>
+    <div class="offline-route">${stopHtml}</div>
+  </div>`;
+}
+function enterOfflineMap(reason) {
+  document.body.classList.add('offline-map');
+  renderOfflineMap(cur, reason);
+  map = null;
+}
+
+if (HAS_LEAFLET) {
+  map = L.map('map', { center: mapCenter, zoom: 6, zoomControl: false, attributionControl: true });
+  L.control.zoom({ position: 'topright' }).addTo(map);
+  tileLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+    maxZoom: 18,
+    subdomains: ['1','2','3','4'],
+    attribution: '地图 © 高德'
+  }).on('tileerror', () => {
+    tileErrorCount += 1;
+    if(tileErrorCount === 4) enterOfflineMap('当前网络无法稳定加载高德底图，已切换到离线应急路线卡。');
+  }).addTo(map);
+
+  /* ── Geolocation ── */
+  const LocateControl = L.Control.extend({
+    options: { position: 'bottomright' },
+    onAdd() {
+      const btn = L.DomUtil.create('button', 'locate-btn');
+      btn.innerHTML = '📍';
+      btn.title = '我的位置';
+      L.DomEvent.disableClickPropagation(btn);
+      btn.addEventListener('click', () => {
+        btn.classList.add('active');
+        map.locate({ setView: true, maxZoom: 15 });
+      });
+      this._btn = btn;
+      return btn;
+    }
+  });
+  new LocateControl().addTo(map);
+  map.on('locationfound', e => {
+    const r = e.accuracy / 2;
+    const ll = mapLatLng(e.latlng.lat, e.latlng.lng);
+    if (locMarker) { locMarker.setLatLng(ll); locCircle.setLatLng(ll).setRadius(r); }
+    else {
+      locMarker = L.marker(ll, {
+        icon: L.divIcon({ className:'', html:'<div style="width:14px;height:14px;border-radius:50%;background:#007aff;border:2.5px solid #fff;box-shadow:0 0 6px rgba(0,122,255,.5)"></div><div class="loc-pulse" style="position:absolute;top:0;left:0"></div>', iconSize:[14,14], iconAnchor:[7,7] }),
+        zIndexOffset: 2000
+      }).addTo(map);
+      locCircle = L.circle(ll, { radius: r, color: '#007aff', fillColor: '#007aff', fillOpacity: .08, weight: 1 }).addTo(map);
+    }
+  });
+  map.on('locationerror', () => {});
+
+  if (HOTEL.lat) L.marker(mapLatLng(HOTEL.lat, HOTEL.lng), { icon: icon('#ff9500','🏨'), zIndexOffset: 1000 }).addTo(map).bindPopup(`<b>${HOTEL.name}</b>`);
+} else {
+  enterOfflineMap('Leaflet 地图组件未加载，已自动切换到离线应急路线卡。');
+}
 
 function icon(color, emoji) {
+  if(!HAS_LEAFLET) return null;
   return L.divIcon({ className: '', html: `<div style="width:28px;height:28px;border-radius:50%;background:${color};border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.18)">${emoji||''}</div>`, iconSize: [28,28], iconAnchor: [14,14], popupAnchor: [0,-16] });
 }
 
-if (HOTEL.lat) L.marker(mapLatLng(HOTEL.lat, HOTEL.lng), { icon: icon('#ff9500','🏨'), zIndexOffset: 1000 }).addTo(map).bindPopup(`<b>${HOTEL.name}</b>`);
-
-let markers = [], polylines = [];
-const emojis = { food:'🍽️', spot:'📍', hotel:'🏨', transport:'🚃', drink:'🍺' };
-
-function clearMap() { markers.forEach(m=>map.removeLayer(m)); polylines.forEach(p=>map.removeLayer(p)); markers=[]; polylines=[]; }
+function clearMap() {
+  if(!map) return;
+  markers.forEach(m=>map.removeLayer(m)); polylines.forEach(p=>map.removeLayer(p)); markers=[]; polylines=[];
+}
 
 function showDay(idx) {
+  if(!map || !HAS_LEAFLET) { renderOfflineMap(idx); return; }
   clearMap();
   if (idx === 0) {
     const pts = [];
@@ -636,7 +716,9 @@ function locCard(loc, dayIdx) {
     lnk += `<a href="${dpHref}" onclick="return openDp('${locKey.replace(/'/g,"\\'")}')" class="btn dp">${dpLabel}</a>`;
   }
   if(loc.reserve) lnk += `<a href="${loc.reserve}" target="_blank" class="btn rsv">📅 预约</a>`;
-  return `<div class="tl-item"><div class="tl-dot ${dot}"></div><div class="card" onclick="if(!event.target.closest('.btn,.links'))toggle('${uid}')"><div class="time">${loc.time!=='—'?loc.time:'备选'}</div><div class="name">${bdg} ${loc.name}</div><div class="desc">${loc.desc}</div>${loc.budget?'<div class="budget">'+loc.budget+'</div>':''}${payChips(loc.pay)}<div class="links">${lnk}</div>${loc.detail?'<div class="details" id="'+uid+'">'+loc.detail.replace(/\n/g,'<br>')+'</div>':''}</div></div>`;
+  const emergency = `<br><strong>应急</strong> 坐标 ${coordText(loc)}；离线地图搜索：${escapeHtml(navKeyword(loc))}`;
+  const detailText = `${loc.detail ? loc.detail.replace(/\n/g,'<br>') : ''}${emergency}`;
+  return `<div class="tl-item"><div class="tl-dot ${dot}"></div><div class="card" onclick="if(!event.target.closest('.btn,.links'))toggle('${uid}')"><div class="time">${loc.time!=='—'?loc.time:'备选'}</div><div class="name">${bdg} ${loc.name}</div><div class="desc">${loc.desc}</div>${loc.budget?'<div class="budget">'+loc.budget+'</div>':''}${payChips(loc.pay)}<div class="links">${lnk}</div><div class="details" id="${uid}">${detailText}</div></div></div>`;
 }
 
 function renderDay(idx) {
@@ -644,6 +726,7 @@ function renderDay(idx) {
   const main = d.locations.filter(l=>l.time!=='—');
   const alt = d.locations.filter(l=>l.time==='—');
   let h = `<div class="day-head"><h2>${d.title}</h2><p>${d.date}</p></div>`;
+  h += `<div class="emergency-box"><strong>当日弱网用法</strong><br>优先看顶部离线路线卡和每个点位详情里的坐标/搜索词。导航前先用高德离线地图搜索住宿、景区或路口名称；小红书和大众点评仅作有网时参考。</div>`;
   if(d.route || d.risk) {
     h += `<div class="route-bar">${d.route ? '<strong>路线</strong>\n' + d.route : ''}${d.risk ? '\n<strong>提醒</strong>\n' + d.risk : ''}</div>`;
   }
@@ -653,7 +736,6 @@ function renderDay(idx) {
 }
 
 // ══════════ NAV ══════════
-let cur = 0;
 const tabsEl = document.getElementById('tabs');
 const contentEl = document.getElementById('content');
 
