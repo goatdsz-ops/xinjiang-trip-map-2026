@@ -146,6 +146,9 @@ a:hover { text-decoration: underline; }
 /* ── Route bar ── */
 .route-bar { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); font-size: 13px; color: var(--text-secondary); line-height: 1.7; white-space: pre-line; }
 .route-bar strong { color: var(--text-primary); }
+.light-box { background: #fff8e6; border: .5px solid rgba(255,149,0,.28); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); font-size: 13px; color: #6b4300; line-height: 1.65; white-space: pre-line; }
+.light-box strong { color: #4f3200; }
+.light-box .time { color: #b65f00; font-weight: 700; }
 
 /* ── Timeline ── */
 .timeline { position: relative; padding-left: 24px; }
@@ -439,6 +442,22 @@ const DAYS = [
   }
 ];
 
+const LIGHT_NOTES = {
+  1: { sun: '日出约08:12 · 日落约20:46', photo: '赛里木湖下午到傍晚光线更柔，湖边风大，克勒涌珠适合傍晚短停。' },
+  2: { sun: '日出约08:08 · 日落约20:38', photo: '果子沟大桥上午补拍，唐布拉傍晚侧光好看，但山区不要拖到夜路。' },
+  3: { sun: '日出约08:18 · 日落约20:44', photo: '赶路日以车览为主，昭苏/夏塔方向下午光线柔和，天黑前到住宿优先。' },
+  4: { sun: '日出约08:19 · 日落约20:43', photo: '夏塔早进景区避开排队，中午到下午山谷层次好；末班车和体力优先于等光。' },
+  5: { sun: '日出约08:18 · 日落约20:39', photo: '伊昭公路上午到下午都可拍，白石峰侧光更有层次；雨雪雾时以安全通行为准。' },
+  6: { sun: '日出约08:13 · 日落约20:30', photo: '独库南段不为拍照拖时间，19点前驶出山区比等夕阳重要。' },
+  7: { sun: '日出约08:14 · 日落约20:28', photo: '库车大峡谷中午到下午岩壁纹理更明显，老城适合傍晚轻逛。' },
+  8: { sun: '日出约08:43 · 日落约20:54', photo: '抵达喀什后以古城傍晚和夜景为主，不做深度游，给高原段留体力。' },
+  9: { sun: '白沙湖日出约08:45 · 日落约20:54；喀拉库勒湖日出约08:48 · 日落约20:56', photo: '白沙湖10:30-11:30光线和执行节奏都比较稳。喀拉库勒湖/不周山傍晚好看，但高原首日不建议硬等完整日落。' },
+  10: { sun: '塔县/盘龙古道日出约08:48 · 日落约20:54；班迪尔蓝湖日出约08:49 · 日落约20:55', photo: '盘龙古道下午拍弯道层次，班迪尔蓝湖16:00-17:30更稳；若等20:55日落，回塔县会偏晚。' },
+  11: { sun: '塔县日出约08:49 · 日落约20:52', photo: '石头城和金草滩适合下午到日落前，光线柔和但风冷，厚外套提前穿好。' },
+  12: { sun: '喀什日出约08:47 · 日落约20:48', photo: '返程白沙湖只短停，下午到喀什古城后适合茶馆、街巷和夜景。' },
+  13: { sun: '喀什机场日出约08:48 · 日落约20:46', photo: '最后一天不为光线安排远点，机场时间和还车优先。' }
+};
+
 // ╔══════════════════════════════════════════════════════════════╗
 // ║  Overview tab content                                       ║
 // ╚══════════════════════════════════════════════════════════════╝
@@ -459,6 +478,7 @@ function overviewContent() {
 <div class="pay-summary"><h4>车辆</h4><div>8人不建议一台大车跑全程。伊昭、独库等路段要按当年公告确认车型限制，稳妥方案是两台7座及以下车，司机可轮换。</div></div>
 <div class="pay-summary"><h4>最高风险日</h4><div class="warn">D6 伊宁 -> 巴音布鲁克 -> 独库南段 -> 库车过重。手机地图里保留原路线，同时放入“巴音布鲁克/和静住一晚”的备选。</div></div>
 <div class="pay-summary"><h4>高原段</h4><div>D9-D11进入帕米尔和塔县，慢走、不跑跳、不饮酒。若有人明显高反，优先住塔县供氧酒店并砍盘龙古道。</div></div>
+<div class="pay-summary"><h4>日出日落与拍照光线</h4><div>9月中下旬北疆日出约08:08-08:19、日落约20:30-20:46；喀什/帕米尔日出约08:43-08:49、日落约20:46-20:56。早晚太阳低，光线更柔，适合湖面、雪山、人像和古城；但高原和山区不为等日落压缩安全时间。</div></div>
 <div class="pay-summary"><h4>周一闭馆</h4><div>D7是周一，克孜尔石窟不要作为锚点。默认走天山神秘大峡谷 + 库车老城。</div></div>
 <div class="section-head">图例</div>
 <div class="legend">
@@ -727,6 +747,10 @@ function renderDay(idx) {
   const alt = d.locations.filter(l=>l.time==='—');
   let h = `<div class="day-head"><h2>${d.title}</h2><p>${d.date}</p></div>`;
   h += `<div class="emergency-box"><strong>当日弱网用法</strong><br>优先看顶部离线路线卡和每个点位详情里的坐标/搜索词。导航前先用高德离线地图搜索住宿、景区或路口名称；小红书和大众点评仅作有网时参考。</div>`;
+  const light = LIGHT_NOTES[idx];
+  if(light) {
+    h += `<div class="light-box"><strong>日出日落 / 光线建议</strong><br><span class="time">${light.sun}</span><br>${light.photo}</div>`;
+  }
   if(d.route || d.risk) {
     h += `<div class="route-bar">${d.route ? '<strong>路线</strong>\n' + d.route : ''}${d.risk ? '\n<strong>提醒</strong>\n' + d.risk : ''}</div>`;
   }
