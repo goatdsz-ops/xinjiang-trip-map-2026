@@ -149,6 +149,9 @@ a:hover { text-decoration: underline; }
 .light-box { background: #fff8e6; border: .5px solid rgba(255,149,0,.28); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); font-size: 13px; color: #6b4300; line-height: 1.65; white-space: pre-line; }
 .light-box strong { color: #4f3200; }
 .light-box .time { color: #b65f00; font-weight: 700; }
+.weather-box { background: #eef8f3; border: .5px solid rgba(52,199,89,.25); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); font-size: 13px; color: #21543a; line-height: 1.65; white-space: pre-line; }
+.weather-box strong { color: #153a29; }
+.weather-box .temp { color: var(--tint-green); font-weight: 700; }
 
 /* ── Timeline ── */
 .timeline { position: relative; padding-left: 24px; }
@@ -470,6 +473,22 @@ const LIGHT_NOTES = {
   13: { sun: '喀什机场日出约08:48 · 日落约20:46', photo: '最后一天不为光线安排远点，机场时间和还车优先。' }
 };
 
+const DAILY_WEATHER = {
+  1: { temp: '博乐约15-30°C；赛里木湖/果子沟湖边体感更低', tip: '落地日白天可能偏热，湖边和傍晚风大，薄羽绒或冲锋衣随手拿。' },
+  2: { temp: '果子沟-唐布拉约10-24°C，山区早晚冷', tip: '车上分层穿衣，桥上和牧道风口加外套；遇雨雪或封路优先切常规路线。' },
+  3: { temp: '唐布拉-昭苏-夏塔约8-22°C', tip: '赶路日温差大，下午到夏塔方向转凉，住宿前不要把厚衣服压在箱底。' },
+  4: { temp: '夏塔山谷约5-18°C，冰川方向体感更冷', tip: '一次性雨衣、冲锋衣、薄羽绒都随身；徒步出汗后及时加衣，避免返程受凉。' },
+  5: { temp: '昭苏/伊昭/伊宁约10-24°C，达坂风口更冷', tip: '伊昭公路高点短停拍照即可，雾雨时保暖和通行安全优先。' },
+  6: { temp: '伊宁/库车较暖约12-28°C；巴音布鲁克/独库高点可能2-15°C', tip: '全天跨海拔，按“短袖+抓绒/薄羽绒+冲锋衣”组合准备，不为拍照脱衣久站。' },
+  7: { temp: '库车约13-28°C', tip: '白天偏晒，峡谷和老城以防晒、补水、舒适鞋为主。' },
+  8: { temp: '喀什约18-28°C', tip: '赶路后傍晚古城轻逛，白天防晒，夜里薄外套即可。' },
+  9: { temp: '喀什约13-28°C；白沙湖/喀拉库勒湖/不周山约0-15°C', tip: '首日上高原，湖边风大且温差明显，帽子、墨镜、防晒和厚外套都要在车内易取位置。' },
+  10: { temp: '塔县/盘龙古道/班迪尔蓝湖约0-16°C', tip: '早晚接近冰点，盘龙和蓝湖风口冷；若有雨雪或大风，缩短停留。' },
+  11: { temp: '塔县约0-17°C', tip: '县城白天可轻装，石头城/金草滩下午到傍晚风冷，厚外套提前穿好。' },
+  12: { temp: '塔县约0-16°C；喀什约13-28°C', tip: '从高原下撤到喀什会明显变暖，车内方便增减衣物；返程观景点仍按高原风口准备。' },
+  13: { temp: '喀什约13-27°C', tip: '最后一天以机场和还车为主，白天防晒补水，随身留一件薄外套应对候机厅温差。' }
+};
+
 // ╔══════════════════════════════════════════════════════════════╗
 // ║  Overview tab content                                       ║
 // ╚══════════════════════════════════════════════════════════════╝
@@ -487,6 +506,7 @@ function overviewContent() {
 <div class="section-head">行程概览</div>
 <div class="day-list">${DAYS.slice(1).map(d=>`<div class="card" onclick="go(${d.id})"><div class="name"><span class="dot" style="background:${d.color}"></span>${d.label} · ${d.title}</div><div class="desc">${d.date}</div></div>`).join('')}</div>
 <div class="section-head">执行提醒</div>
+<div class="pay-summary"><h4>天气与穿衣</h4><div>每日页已补充当日气温范围和穿衣提醒。前半程参考短期预报，后半程尤其帕米尔/塔县为中期预报和高海拔体感修正；出发前两天建议再更新一次，以当天景区、交警和天气预警为准。</div></div>
 <div class="pay-summary"><h4>车辆与租车</h4><div>已确定租2辆5座SUV，分批取车：其中一辆9.15在博乐机场取车，另一辆9.19 15:00在伊宁机场服务点取车，9.27 15:00喀什机场服务点还车。取车前完成身份和驾驶证认证，现场确认车牌、轮胎、保险、随车工具和服务包。两车分配饮水、药品、雨具和零食，不把关键物资集中在一台车。</div></div>
 <div class="pay-summary"><h4>行前物资</h4><div>用品：一次性四件套4套给夏塔使用，一次性雨衣8件，花露水1瓶，驱蚊水，湿巾1提，纸巾2提，酒精湿巾1提，洗衣消毒液，喷雾酒精。<br>吃喝：小瓶矿泉水24瓶，小梅屋老话梅2包，喜之郎CC果冻2包，辣条/薯片/坚果若干；山姆零食带蛋皇溏心鹌鹑蛋、有友脱骨鸭掌、香脆猪肉松条各1包。<br>药品：布洛芬、葡萄糖口服液；肠胃、感冒、咽喉和消食类常用药，出发前分装到两车。</div></div>
 <div class="pay-summary"><h4>最高风险日</h4><div class="warn">D6 伊宁 -> 巴音布鲁克 -> 独库南段 -> 库车过重。手机地图里保留原路线，同时放入“巴音布鲁克/和静住一晚”的备选。</div></div>
@@ -803,6 +823,10 @@ function renderDay(idx) {
   const light = LIGHT_NOTES[idx];
   if(light) {
     h += `<div class="light-box"><strong>日出日落 / 光线建议</strong><br><span class="time">${light.sun}</span><br>${light.photo}</div>`;
+  }
+  const weather = DAILY_WEATHER[idx];
+  if(weather) {
+    h += `<div class="weather-box"><strong>天气与穿衣</strong><br><span class="temp">${weather.temp}</span><br>${weather.tip}</div>`;
   }
   if(d.route || d.risk) {
     h += `<div class="route-bar">${d.route ? '<strong>路线</strong>\n' + d.route : ''}${d.risk ? '\n<strong>提醒</strong>\n' + d.risk : ''}</div>`;
