@@ -289,7 +289,8 @@ const DAYS = [
     route: '博乐机场 -> 赛里木湖东门进南门出 -> 果子沟民宿\n180km / 2.5h + 环湖精华段约55km',
     risk: '落地日轻手执行。若航班晚点，优先保克勒涌珠和南门出湖，果子沟大桥挪到次日。',
     locations: [
-      { name: '博乐阿拉山口机场', lat: 44.895, lng: 82.300, type: 'transport', time: '落地', desc: '惠州一行人落地集合，取车、检查行李和补给。', detail: '8人建议两台7座及以下车辆，确认后备箱容量、备胎、充电线、对讲或群定位。', gmap: 'Bole+Alashankou+Airport' },
+      { name: '黄凯玉航班提示', lat: 44.895, lng: 82.300, type: 'transport', time: '12:30', desc: '黄凯玉惠州经咸阳飞抵博乐，落地后按实际安排集合。', detail: '9.14 ZH9276 惠州平潭机场T2 20:20 -> 咸阳机场T2 22:55；9.15 MU6169 咸阳机场T5 08:20 -> 博乐机场 12:30。中转过夜注意休息和行李衔接。', gmap: 'Bole+Alashankou+Airport' },
+      { name: '博乐机场取车', lat: 44.895, lng: 82.300, type: 'transport', time: '落地后', desc: '其中一辆5座SUV在博乐机场取车，先承接北疆段行李和补给。', detail: '取车时检查车牌、油量/电量、轮胎、随车工具、保险、车身划痕和后备箱容量；雨具、药品、饮水不要全部放在同一辆车。', gmap: 'Bole+Alashankou+Airport' },
       { name: '赛里木湖东门', lat: 44.617, lng: 81.392, type: 'spot', time: '下午', desc: '东门进入，开始环湖精华段。', detail: '湖边风大温差大，车上直接备冲锋衣、薄羽绒、帽子和墨镜。', xhs: 'https://xhslink.cn/o/7x3JuisolzM', xhsKeyword: '赛里木湖 东门 环湖' },
       { name: '克勒涌珠', lat: 44.563, lng: 81.181, type: 'spot', time: '傍晚', desc: '当天必停点，适合看湖面、雪山和日落光线。', detail: '如果当天时间被压缩，只保留这里和南门出湖，不再绕远端点将台。', xhs: 'https://xhslink.cn/o/3R1YuiUmInD', xhsKeyword: '赛里木湖 克勒涌珠' },
       { name: '果子沟民宿区', lat: 44.432, lng: 80.944, type: 'hotel', time: '夜宿', desc: '不住景区内，降低住宿成本和订房压力。', detail: '晚餐优先民宿解决，车上保留饮用水、零食和热量补给。', xhs: 'https://xhslink.cn/o/56N31yj2JLG', xhsKeyword: '果子沟 民宿', gmap: '果子沟 民宿' }
@@ -343,6 +344,7 @@ const DAYS = [
       { name: '安格列特达坂', lat: 43.280, lng: 81.030, type: 'spot', time: '上午', desc: '伊昭公路高点，约3170m，风大。', detail: '短停拍照即可，遇雨雪雾立刻降低预期。', xhsKeyword: '伊昭公路 安格列特达坂' },
       { name: '白石峰', lat: 43.434, lng: 81.140, type: 'spot', time: '中午', desc: '伊昭公路代表性雪山和峡谷视角。', detail: '道路弯多坡陡，拍照点以安全停车为前提。', xhsKeyword: '伊昭公路 白石峰' },
       { name: '深圳2人航班提示', lat: 43.956, lng: 81.331, type: 'transport', time: '航班日', desc: '仅记录深圳2人经成都飞抵伊宁的航班信息和注意事项。', detail: '四川航空3U6796 深圳->成都：黄锡芬39J、庄帝森39K；3U6916 成都->伊宁：黄锡芬45A、庄帝森45B。出发前确认值机情况，未成功则提前2小时到机场办理；落地后按实际安排自行进城或与大家会合。', gmap: '伊宁机场' },
+      { name: '伊宁机场取车', lat: 43.956, lng: 81.331, type: 'transport', time: '15:00', desc: '确认租2辆5座SUV，伊宁机场服务点取车，后续南疆段两车同行。', detail: '取车前完成身份和驾驶证认证，确认车牌、油量/电量、轮胎、随车工具、保险和服务包。还车为9.27 15:00喀什机场服务点。', gmap: '伊宁机场 租车' },
       { name: '伊宁六星街', lat: 43.914, lng: 81.300, type: 'spot', time: '傍晚', desc: '与深圳2人汇合，轻逛六星街和喀赞其。', detail: '当天核心是汇合和休整，不做深度城市游。', xhsKeyword: '伊宁 六星街 喀赞其' },
       { name: '伊宁六星街附近住宿', lat: 43.914, lng: 81.300, type: 'hotel', time: '夜宿', desc: '住六星街附近，晚餐和散步都方便。', detail: '提前分配第二天车上座位和路餐，9.20是最高风险日。', gmap: '伊宁 六星街 酒店' }
     ]
@@ -351,7 +353,7 @@ const DAYS = [
     id: 6, label: 'D6', date: '9.20 周日', title: '伊宁 -> 巴音布鲁克 -> 独库南段 -> 库车',
     color: '#ff3b30',
     route: '伊宁 -> G218 -> 巴音布鲁克 -> G217独库南段 -> 库车\n约530km / 计划12-12.5h，8人实际可能更长',
-    risk: '最高风险日。6:30-7:00必须出发，19点前驶出独库山区，严禁夜穿。建议实际执行时拆成两天。',
+    risk: '最高风险日。6:30-7:00必须出发，19点前驶出独库山区，严禁夜穿；可视天气、路况和全员状态酌情拆成两天。',
     locations: [
       { name: '伊宁出发点', lat: 43.914, lng: 81.300, type: 'transport', time: '06:30', desc: '全员上车前完成早餐、厕所、装车。', detail: '两台车保持队形，司机轮换明确。今天不为任何单点过度停车。', gmap: '伊宁 六星街' },
       { name: '巴音布鲁克镇加油补给', lat: 43.032, lng: 84.151, type: 'food', time: '中午', desc: '只加油补给，不深度游玩，不进景区。', budget: '路餐/补给', detail: '这里是进独库南段前关键补给点。加满油，下载离线地图，确认独库通行。', dianpingKeyword: '巴音布鲁克 加油 简餐' },
@@ -476,16 +478,17 @@ function overviewContent() {
   return `
 <div class="hero"><h1>新疆13天环线</h1><p class="subtitle">8人手机行程地图 · 9.15-9.27</p></div>
 <div class="info-grid">
-  <div class="info-card"><div class="label">人数</div><div class="value">8人，建议2台7座及以下车</div></div>
+  <div class="info-card"><div class="label">人数</div><div class="value">8人，已定2辆5座SUV</div></div>
   <div class="info-card"><div class="label">主线</div><div class="value">博乐进，喀什出，北疆转南疆</div></div>
-  <div class="info-card"><div class="label">最高风险</div><div class="value">D6 伊宁到库车，建议拆分</div></div>
+  <div class="info-card"><div class="label">最高风险</div><div class="value">D6 伊宁到库车，可酌情拆分</div></div>
   <div class="info-card"><div class="label">硬确认</div><div class="value">边防证、伊昭/独库/精伊牧道通行</div></div>
 </div>
 <div class="emergency-box"><strong>弱网应急</strong><br>出发前先打开本页一次，并在高德地图下载新疆离线地图、收藏每日住宿和关键景点。若底图加载失败，顶部会自动切换为离线路线卡；小红书、在线底图和实时导航仍需要网络。</div>
 <div class="section-head">行程概览</div>
 <div class="day-list">${DAYS.slice(1).map(d=>`<div class="card" onclick="go(${d.id})"><div class="name"><span class="dot" style="background:${d.color}"></span>${d.label} · ${d.title}</div><div class="desc">${d.date}</div></div>`).join('')}</div>
 <div class="section-head">执行提醒</div>
-<div class="pay-summary"><h4>车辆</h4><div>8人不建议一台大车跑全程。伊昭、独库等路段要按当年公告确认车型限制，稳妥方案是两台7座及以下车，司机可轮换。</div></div>
+<div class="pay-summary"><h4>车辆与租车</h4><div>已确定租2辆5座SUV，分批取车：其中一辆9.15在博乐机场取车，另一辆9.19 15:00在伊宁机场服务点取车，9.27 15:00喀什机场服务点还车。取车前完成身份和驾驶证认证，现场确认车牌、轮胎、保险、随车工具和服务包。两车分配饮水、药品、雨具和零食，不把关键物资集中在一台车。</div></div>
+<div class="pay-summary"><h4>行前物资</h4><div>用品：一次性四件套4套给夏塔使用，一次性雨衣8件，花露水1瓶，驱蚊水，湿巾1提，纸巾2提，酒精湿巾1提，洗衣消毒液，喷雾酒精。<br>吃喝：小瓶矿泉水24瓶，小梅屋老话梅2包，喜之郎CC果冻2包，辣条/薯片/坚果若干；山姆零食带蛋皇溏心鹌鹑蛋、有友脱骨鸭掌、香脆猪肉松条各1包。<br>药品：布洛芬、葡萄糖口服液；肠胃、感冒、咽喉和消食类常用药，出发前分装到两车。</div></div>
 <div class="pay-summary"><h4>最高风险日</h4><div class="warn">D6 伊宁 -> 巴音布鲁克 -> 独库南段 -> 库车过重。手机地图里保留原路线，同时放入“巴音布鲁克/和静住一晚”的备选。</div></div>
 <div class="pay-summary"><h4>高原段</h4><div>D9-D11进入帕米尔和塔县，慢走、不跑跳、不饮酒。若有人明显高反，优先住塔县供氧酒店并砍盘龙古道。</div></div>
 <div class="pay-summary"><h4>日出日落与拍照光线</h4><div>9月中下旬北疆日出约08:08-08:19、日落约20:30-20:46；喀什/帕米尔日出约08:43-08:49、日落约20:46-20:56。早晚太阳低，光线更柔，适合湖面、雪山、人像和古城；但高原和山区不为等日落压缩安全时间。</div></div>
@@ -571,7 +574,7 @@ function renderOfflineMap(idx, reason) {
     <div class="offline-actions">
       <span class="offline-pill">可离线查看文字行程</span>
       <span class="offline-pill warn">底图/小红书需联网</span>
-      ${idx === 6 ? '<span class="offline-pill danger">D6建议拆分</span>' : ''}
+      ${idx === 6 ? '<span class="offline-pill danger">D6可酌情拆分</span>' : ''}
     </div>
     <div class="offline-route">${stopHtml}</div>
   </div>`;
