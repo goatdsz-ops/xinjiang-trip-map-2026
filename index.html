@@ -290,9 +290,9 @@ const DAYS = [
     risk: '落地日轻手执行。若航班晚点，优先保克勒涌珠和南门出湖，果子沟大桥挪到次日。',
     locations: [
       { name: '博乐阿拉山口机场', lat: 44.895, lng: 82.300, type: 'transport', time: '落地', desc: '惠州一行人落地集合，取车、检查行李和补给。', detail: '8人建议两台7座及以下车辆，确认后备箱容量、备胎、充电线、对讲或群定位。', gmap: 'Bole+Alashankou+Airport' },
-      { name: '赛里木湖东门', lat: 44.617, lng: 81.392, type: 'spot', time: '下午', desc: '东门进入，开始环湖精华段。', detail: '湖边风大温差大，车上直接备冲锋衣、薄羽绒、帽子和墨镜。', xhs: 'https://www.xiaohongshu.com/explore/6a2520e0000000000701132e?xsec_token=ABQPQHcnOT2qlZ4oYFh3j87xmhx-t__lKHrQNFON_xGAc=&xsec_source=pc_search&source=web_search_result_notes', xhsKeyword: '赛里木湖 东门 环湖' },
-      { name: '克勒涌珠', lat: 44.563, lng: 81.181, type: 'spot', time: '傍晚', desc: '当天必停点，适合看湖面、雪山和日落光线。', detail: '如果当天时间被压缩，只保留这里和南门出湖，不再绕远端点将台。', xhs: 'https://www.xiaohongshu.com/explore/6a566b1a000000000f0163ef?xsec_token=ABDotna69wnoze8NAq177jgsRN2eHnZ1tdh9lSjerZ-rs=&xsec_source=pc_search&source=web_search_result_notes', xhsKeyword: '赛里木湖 克勒涌珠' },
-      { name: '果子沟民宿区', lat: 44.432, lng: 80.944, type: 'hotel', time: '夜宿', desc: '不住景区内，降低住宿成本和订房压力。', detail: '晚餐优先民宿解决，车上保留饮用水、零食和热量补给。', xhs: 'https://www.xiaohongshu.com/explore/69f6be0d00000000350263e9?xsec_token=ABy1KEYcvX09WmqaekmvZ_4wm1fCW2w4KL-bBeYaYMJ5w=&xsec_source=pc_search&source=web_search_result_notes', xhsKeyword: '果子沟 民宿', gmap: '果子沟 民宿' }
+      { name: '赛里木湖东门', lat: 44.617, lng: 81.392, type: 'spot', time: '下午', desc: '东门进入，开始环湖精华段。', detail: '湖边风大温差大，车上直接备冲锋衣、薄羽绒、帽子和墨镜。', xhs: 'https://xhslink.cn/o/7x3JuisolzM', xhsKeyword: '赛里木湖 东门 环湖' },
+      { name: '克勒涌珠', lat: 44.563, lng: 81.181, type: 'spot', time: '傍晚', desc: '当天必停点，适合看湖面、雪山和日落光线。', detail: '如果当天时间被压缩，只保留这里和南门出湖，不再绕远端点将台。', xhs: 'https://xhslink.cn/o/3R1YuiUmInD', xhsKeyword: '赛里木湖 克勒涌珠' },
+      { name: '果子沟民宿区', lat: 44.432, lng: 80.944, type: 'hotel', time: '夜宿', desc: '不住景区内，降低住宿成本和订房压力。', detail: '晚餐优先民宿解决，车上保留饮用水、零食和热量补给。', xhs: 'https://xhslink.cn/o/56N31yj2JLG', xhsKeyword: '果子沟 民宿', gmap: '果子沟 民宿' }
     ]
   },
   {
@@ -336,12 +336,13 @@ const DAYS = [
   {
     id: 5, label: 'D5', date: '9.19 周六', title: '夏塔 -> 伊昭公路 -> 伊宁汇合',
     color: '#8e7cc3',
-    route: '夏塔 -> 昭苏县城 -> S237伊昭公路反穿 -> 伊宁市区\n260km / 观景预留约7h',
-    risk: '07:30准时出发。伊昭公路常见7座以上禁行和昼行限制，8人必须两台小车方案。',
+    route: '夏塔 -> 昭苏县城 -> S237伊昭公路反穿 -> 伊宁市区；深圳2人经成都飞伊宁\n260km / 观景预留约7h',
+    risk: '07:30准时出发。伊昭公路常见7座以上禁行和昼行限制，8人必须两台小车方案。深圳2人若未值机成功，按航司提醒提前2小时到机场办理。',
     locations: [
       { name: '昭苏县早餐/补给', lat: 43.158, lng: 81.131, type: 'food', time: '早上', desc: '进入伊昭前完成早餐、加油和补水。', budget: '县城早餐', detail: '不要空腹上山路。两台车同步油量和离线地图。', dianpingKeyword: '昭苏 早餐' },
       { name: '安格列特达坂', lat: 43.280, lng: 81.030, type: 'spot', time: '上午', desc: '伊昭公路高点，约3170m，风大。', detail: '短停拍照即可，遇雨雪雾立刻降低预期。', xhsKeyword: '伊昭公路 安格列特达坂' },
       { name: '白石峰', lat: 43.434, lng: 81.140, type: 'spot', time: '中午', desc: '伊昭公路代表性雪山和峡谷视角。', detail: '道路弯多坡陡，拍照点以安全停车为前提。', xhsKeyword: '伊昭公路 白石峰' },
+      { name: '深圳2人航班提示', lat: 43.956, lng: 81.331, type: 'transport', time: '航班日', desc: '仅记录深圳2人经成都飞抵伊宁的航班信息和注意事项。', detail: '四川航空3U6796 深圳->成都：黄锡芬39J、庄帝森39K；3U6916 成都->伊宁：黄锡芬45A、庄帝森45B。出发前确认值机情况，未成功则提前2小时到机场办理；落地后按实际安排自行进城或与大家会合。', gmap: '伊宁机场' },
       { name: '伊宁六星街', lat: 43.914, lng: 81.300, type: 'spot', time: '傍晚', desc: '与深圳2人汇合，轻逛六星街和喀赞其。', detail: '当天核心是汇合和休整，不做深度城市游。', xhsKeyword: '伊宁 六星街 喀赞其' },
       { name: '伊宁六星街附近住宿', lat: 43.914, lng: 81.300, type: 'hotel', time: '夜宿', desc: '住六星街附近，晚餐和散步都方便。', detail: '提前分配第二天车上座位和路餐，9.20是最高风险日。', gmap: '伊宁 六星街 酒店' }
     ]
